@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Server setup script
+# Setting up the server of the HBNB porject
 if ! command -v nginx &> /dev/null
 then
 	sudo apt-get -y update
@@ -42,4 +42,4 @@ then
 	' "$nginx_config" | sudo tee "$nginx_config" > /dev/null
 
 fi
-sudo systemctl restart nginx
+sudo service nginx restart
