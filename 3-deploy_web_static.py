@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-"""A Fabric Script to deploy archive to the web servers"""
+"""A Fabric Script to create and deploy archive to the web servers"""
 from fabric.api import *
 from datetime import datetime
 import os
 
 env.hosts = ['54.83.175.223', '100.25.136.195']
 env.user = "ubuntu"
+
 
 @task
 def do_pack():
@@ -31,6 +32,7 @@ def do_pack():
     if result.failed:
         return None
     return path
+
 
 @task
 def do_deploy(archive_path):
@@ -65,3 +67,18 @@ def do_deploy(archive_path):
     run("ln -s " + data_path + " " + current_path)
 
     return True
+
+
+@task
+def deploy():
+    """Creates and distributes an archive to the web servers
+
+    Returns:
+        bool: True, if successful, False otherwise
+    """
+    path = do_pack()
+    if path is None:
+        return False
+
+    deploy_status = do_deploy(path)
+    return deploy_status
